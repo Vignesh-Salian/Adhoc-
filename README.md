@@ -14,21 +14,35 @@ HRMA is a time-slot reservation protocol where each time slot is assigned a sepa
 
 ---
 
-## How to Run
+## Getting Started (Linux/cloning)
+
+To get this code onto a Linux machine:
+```bash
+git clone https://github.com/Vignesh-Salian/Adhoc-.git
+cd Adhoc-
+```
 
 ### Option 1: Standalone Output Simulation (Easiest - Windows/Mac/Linux)
-If you only need the simulation output of the frequency hopping logic for logging purposes, you can run the standalone program using standard C++ compilers (like MinGW `g++` on Windows).
+If you only need the simulation output of the frequency hopping logic for logging purposes, you can run the standalone program.
 
-**Steps:**
-1. Open your terminal (or PowerShell).
-2. Navigate to this directory.
-3. Compile the code:
+**Linux/Mac Steps:**
+1. Make the run script executable:
+   ```bash
+   chmod +x run.sh
+   ```
+2. Run the simulation:
+   ```bash
+   ./run.sh
+   ```
+
+**Manual Compilation:**
+1. Compile the code:
    ```bash
    g++ hrma-standalone.cpp -o hrma-standalone
    ```
-4. Run the executable:
-   - On **Windows**: `.\hrma-standalone.exe`
+2. Run the executable:
    - On **Linux/Mac**: `./hrma-standalone`
+   - On **Windows**: `.\hrma-standalone.exe`
 
 **Expected Output:**
 ```
