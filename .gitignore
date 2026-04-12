@@ -1,0 +1,12 @@
+# Binaries
+*.exe
+*.o
+*.obj
+
+# ns-3 build artifacts (if any)
+/build/
+/cmake-cache/
+
+# OS files
+.DS_Store
+Thumbs.db
