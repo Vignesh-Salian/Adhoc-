@@ -81,5 +81,11 @@ sudo apt update && sudo apt install gnuplot -y
 5. **Detailed Stats:** 
    The simulation also generates `hrma-results.xml` containing detailed flow-level statistics (Delay, Jitter, Packet Loss).
 
+6. **Network Animation (NetAnim):**
+   The simulation automatically produces `hrma-animation.xml`. Use this file in the NetAnim tool to visualize node movement and packet exchanges:
+   - Open NetAnim on your Linux system.
+   - Click "Open" and select `hrma-animation.xml`.
+   - Press "Play" to watch the simulation.
+
 ---
 *Created for Ad-Hoc Networks university assignment/research.*

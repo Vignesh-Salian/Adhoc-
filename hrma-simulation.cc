@@ -6,6 +6,7 @@
 #include "ns3/applications-module.h"
 #include "ns3/flow-monitor-module.h"
 #include "ns3/stats-module.h"
+#include "ns3/netanim-module.h"
 
 using namespace ns3;
 
@@ -133,7 +134,11 @@ int main (int argc, char *argv[])
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor = flowmon.InstallAll ();
 
-  // 9. Run Simulation
+  // 9. Set up NetAnim Animation
+  AnimationInterface anim ("hrma-animation.xml");
+  anim.SetMaxPktsPerTraceFile(999999); // Ensure all packets are captured
+
+  // 10. Run Simulation
   Simulator::Stop (Seconds (simulationTime));
   NS_LOG_UNCOND("Starting Simulation...");
   Simulator::Run ();
