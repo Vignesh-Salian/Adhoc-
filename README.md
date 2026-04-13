@@ -53,7 +53,13 @@ If you only need the simulation output of the frequency hopping logic for loggin
 ```
 
 ### Option 2: Running the ns-3 Structural Baseline (Requires Linux/WSL)
-If you have a full ns-3 environment set up (typically on Linux or WSL on Windows), you can run the `hrma-simulation.cc` file. Note that since ns-3 does not natively support HRMA, this provides the Ad-Hoc skeleton and schedules the hopping events.
+If you have a full ns-3 environment set up (typically on Linux or WSL on Windows), you can run the `hrma-simulation.cc` file. This version now includes **FlowMonitor** and **Gnuplot** integration to generate performance graphs.
+
+**Prerequisites:**
+You must have `gnuplot` installed on your Linux system:
+```bash
+sudo apt update && sudo apt install gnuplot -y
+```
 
 **Steps:**
 1. Copy `hrma-simulation.cc` into your ns-3 `scratch` directory.
@@ -61,10 +67,19 @@ If you have a full ns-3 environment set up (typically on Linux or WSL on Windows
    cp hrma-simulation.cc /path/to/ns-3-dev/scratch/
    ```
 2. Navigate to your main ns-3 directory.
-3. Run using the ns-3 build tool:
+3. Run the simulation:
    ```bash
    ./ns3 run scratch/hrma-simulation
    ```
+4. **Generate Graphical Plots:**
+   Once the simulation finished, it will create `.plt` files. Run this to generate the PNG graph:
+   ```bash
+   gnuplot hrma-throughput.plt
+   ```
+   You will now see a file named `hrma-throughput.png` in your folder!
+
+5. **Detailed Stats:** 
+   The simulation also generates `hrma-results.xml` containing detailed flow-level statistics (Delay, Jitter, Packet Loss).
 
 ---
 *Created for Ad-Hoc Networks university assignment/research.*

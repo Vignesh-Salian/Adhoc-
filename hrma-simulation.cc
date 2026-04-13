@@ -4,6 +4,8 @@
 #include "ns3/mobility-module.h"
 #include "ns3/wifi-module.h"
 #include "ns3/applications-module.h"
+#include "ns3/flow-monitor-module.h"
+#include "ns3/stats-module.h"
 
 using namespace ns3;
 
@@ -112,10 +114,45 @@ int main (int argc, char *argv[])
   int M = 5; 
   Simulator::Schedule(Seconds(0.0), &AdvanceToNextSlot, 0, M);
 
-  // 7. Run Simulation
+  // 7. Set up Performance Graphing (Gnuplot)
+  GnuplotHelper plotHelper;
+  plotHelper.ConfigurePlot ("hrma-throughput",
+                            "HRMA Throughput vs Time",
+                            "Time (Seconds)",
+                            "Throughput (bytes)",
+                            "png");
+
+  // Plot throughput of node 0 sending to last node
+  plotHelper.PlotProbe ("ns3::Ipv4PacketProbe",
+                        "/NodeList/0/$ns3::Ipv4L3Protocol/Tx",
+                        "OutputBytes",
+                        "Throughput",
+                        GnuplotAggregator::KEY_BELOW);
+
+  // 8. Set up FlowMonitor to collect statistics
+  FlowMonitorHelper flowmon;
+  Ptr<FlowMonitor> monitor = flowmon.InstallAll ();
+
+  // 9. Run Simulation
   Simulator::Stop (Seconds (simulationTime));
   NS_LOG_UNCOND("Starting Simulation...");
   Simulator::Run ();
+
+  // 10. Process FlowMonitor results
+  monitor->CheckForLostPackets ();
+  Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmon.GetClassifier ());
+  std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetIdStats ();
+
+  for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin (); i != stats.end (); ++i)
+    {
+      Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
+      NS_LOG_UNCOND ("Flow " << i->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << ")");
+      NS_LOG_UNCOND ("  Throughput: " << i->second.rxBytes * 8.0 / (i->second.timeLastRxPacket.GetSeconds () - i->second.timeFirstTxPacket.GetSeconds ()) / 1024 / 1024  << " Mbps");
+      NS_LOG_UNCOND ("  Mean Delay: " << i->second.delaySum.GetSeconds () / i->second.rxPackets << " s");
+    }
+
+  monitor->SerializeToXmlFile ("hrma-results.xml", true, true);
+
   Simulator::Destroy ();
   NS_LOG_UNCOND("Simulation Finished.");
 

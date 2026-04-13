@@ -18,3 +18,11 @@ if [ $? -eq 0 ]; then
 else
     echo "Compilation failed."
 fi
+
+echo ""
+echo "------------------------------------------------"
+echo "Note for ns-3 users:"
+echo "To run the full ns-3 simulation with graphs, copy hrma-simulation.cc to your ns-3 scratch folder."
+echo "Then run: ./ns3 run scratch/hrma-simulation"
+echo "Followed by: gnuplot hrma-throughput.plt"
+echo "------------------------------------------------"
